@@ -9,13 +9,53 @@ package examenlab10p2_emiliocantarero_12111141;
  *
  * @author Emilio Cantarero
  */
-public class JAK extends javax.swing.JFrame {
+public class JAK extends javax.swing.JFrame implements Runnable {
 
     /**
      * Creates new form JAK
      */
+    Thread hilo = new Thread(this);
+    int cont = 1;
+    boolean pausa = false;
+    boolean vivo = true;
+
+    private int vidaJak=5000;
+    private int ataqueJak=5000;
+    private int vidaErrol=30000;
+    private int ataqueErrol=500;
+    
+    @Override
+    public void run() {
+        while(vivo){
+            System.out.println("");
+            while(!pausa){
+                try {
+                    barraErrol.setValue(barraErrol.getValue()-ataqueJak);
+                    if (barraErrol.getValue()<=0){
+                        vivo=false;
+                        break;
+                    }
+                    if (cont==2){
+                        barraJak.setValue(barraJak.getValue()-ataqueErrol);
+                        cont=0;
+                    }
+                    Thread.sleep(500);
+                    cont++;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+                
+        }
+    }
+
     public JAK() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        barraJak.setMaximum(vidaJak);
+        barraErrol.setMaximum(vidaErrol);
+        barraErrol.setValue(vidaErrol);
+        barraJak.setValue(vidaJak);
     }
 
     /**
@@ -79,8 +119,18 @@ public class JAK extends javax.swing.JFrame {
         jLabel3.setText("Ciber Errol");
 
         jButton1.setText("Iniciar Partida");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
 
         jButton2.setText("Pausar");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
 
         jLabel4.setText("Ataque Jak:");
 
@@ -306,6 +356,16 @@ public class JAK extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        pausa=!pausa;
+    }//GEN-LAST:event_jButton2MouseClicked
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // TODO add your handling code here:
+        hilo=new Thread(this);
+        hilo.start();
+    }//GEN-LAST:event_jButton1MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -380,4 +440,5 @@ public class JAK extends javax.swing.JFrame {
     private javax.swing.JLabel jlvidaJak;
     private javax.swing.JTree tree;
     // End of variables declaration//GEN-END:variables
+
 }
