@@ -261,6 +261,11 @@ public class JAK extends javax.swing.JFrame implements Runnable {
         jLabel14.setText("Eliminar Carro");
 
         jButton4.setText("Eliminar");
+        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton4MouseClicked(evt);
+            }
+        });
 
         tf_ataque.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
 
@@ -443,6 +448,18 @@ public class JAK extends javax.swing.JFrame implements Runnable {
 
 
     }//GEN-LAST:event_cb_tiposItemStateChanged
+
+    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+        // TODO add your handling code here:
+        int indice=cb_carros.getSelectedIndex();
+        adminCarro ac = new adminCarro("./Carros/Carros.emi");
+        ac.cargarArchivo();
+        ac.getCarros().remove(indice);
+        JOptionPane.showMessageDialog(this, "Eliminado exitosamente");
+        ac.escribirArchivo();
+        actualizarCb();
+        listar();
+    }//GEN-LAST:event_jButton4MouseClicked
 
     public void actualizarCb() {
         adminCarro ac = new adminCarro("./Carros/Carros.emi");
