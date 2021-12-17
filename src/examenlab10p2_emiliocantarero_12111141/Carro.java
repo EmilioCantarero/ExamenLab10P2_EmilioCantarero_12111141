@@ -1,13 +1,18 @@
 package examenlab10p2_emiliocantarero_12111141;
 
+import java.io.Serializable;
+import java.util.Random;
 
-public class Carro {
+
+public class Carro implements Serializable{
     private int velocidad;
     private float derrape;
     private String nombre;
     private int ataque;
     private int vida;
-
+    Random r=new Random();
+    private static final long SerialVersionUID=777L;
+    
     public Carro() {
     }
 
@@ -17,6 +22,7 @@ public class Carro {
         this.nombre = nombre;
         this.ataque = ataque;
         this.vida = vida;
+        
     }
 
     public int getVelocidad() {
@@ -59,10 +65,13 @@ public class Carro {
         this.vida = vida;
     }
 
+    
+
     @Override
     public String toString() {
         return nombre;
     }
+    
     
     
 }
