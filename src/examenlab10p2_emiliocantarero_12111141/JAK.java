@@ -5,16 +5,22 @@
  */
 package examenlab10p2_emiliocantarero_12111141;
 
+import java.io.File;
 import java.util.Random;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 /**
  *
  * @author Emilio Cantarero
  */
 public class JAK extends javax.swing.JFrame implements Runnable {
-    Random r=new Random();
+
+    Random r = new Random();
     /**
      * Creates new form JAK
      */
@@ -23,25 +29,25 @@ public class JAK extends javax.swing.JFrame implements Runnable {
     boolean pausa = false;
     boolean vivo = true;
 
-    private int vidaJak=5000;
-    private int ataqueJak=5000;
-    private int vidaErrol=30000;
-    private int ataqueErrol=500;
-    
+    private int vidaJak = 5000;
+    private int ataqueJak = 5000;
+    private int vidaErrol = 30000;
+    private int ataqueErrol = 500;
+
     @Override
     public void run() {
-        while(vivo){
+        while (vivo) {
             System.out.println("");
-            while(!pausa){
+            while (!pausa) {
                 try {
-                    barraErrol.setValue(barraErrol.getValue()-ataqueJak);
-                    if (barraErrol.getValue()<=0){
-                        vivo=false;
+                    barraErrol.setValue(barraErrol.getValue() - ataqueJak);
+                    if (barraErrol.getValue() <= 0) {
+                        vivo = false;
                         break;
                     }
-                    if (cont==2){
-                        barraJak.setValue(barraJak.getValue()-ataqueErrol);
-                        cont=0;
+                    if (cont == 2) {
+                        barraJak.setValue(barraJak.getValue() - ataqueErrol);
+                        cont = 0;
                     }
                     Thread.sleep(500);
                     cont++;
@@ -49,7 +55,7 @@ public class JAK extends javax.swing.JFrame implements Runnable {
                     e.printStackTrace();
                 }
             }
-                
+
         }
     }
 
@@ -61,6 +67,7 @@ public class JAK extends javax.swing.JFrame implements Runnable {
         barraErrol.setMaximum(vidaErrol);
         barraErrol.setValue(vidaErrol);
         barraJak.setValue(vidaJak);
+        listar();
     }
 
     /**
@@ -376,104 +383,135 @@ public class JAK extends javax.swing.JFrame implements Runnable {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-        pausa=!pausa;
+        pausa = !pausa;
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
-        hilo=new Thread(this);
+        hilo = new Thread(this);
         hilo.start();
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         // TODO add your handling code here:
-        adminCarro ac=new adminCarro("./Carros/Carros.emi");
+        adminCarro ac = new adminCarro("./Carros/Carros.emi");
         ac.cargarArchivo();
-        String n=tf_nombre.getText();
-        int v=Integer.parseInt(tf_vida.getText());
-        int vel=Integer.parseInt(tf_velocidad.getText());
-        String tipo=cb_tipos.getSelectedItem().toString();
-        int ataque=Integer.parseInt(tf_ataque.getText());
-        float d=Float.parseFloat(tf_derrape.getText());
-        
-        if (n.isEmpty() || String.valueOf(v).isEmpty() || String.valueOf(vel).isEmpty() ||
-                String.valueOf(ataque).isEmpty() || String.valueOf(d).isEmpty()){
-            JOptionPane.showMessageDialog(this,"Uno de los campos esta vacio");
-            
-        }else{
+        String n = tf_nombre.getText();
+        int v = Integer.parseInt(tf_vida.getText());
+        int vel = Integer.parseInt(tf_velocidad.getText());
+        String tipo = cb_tipos.getSelectedItem().toString();
+        int ataque = Integer.parseInt(tf_ataque.getText());
+        float d = Float.parseFloat(tf_derrape.getText());
+
+        if (n.isEmpty() || String.valueOf(v).isEmpty() || String.valueOf(vel).isEmpty()
+                || String.valueOf(ataque).isEmpty() || String.valueOf(d).isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Uno de los campos esta vacio");
+
+        } else {
             Carro c;
-           if (tipo.equals("Belico")){
-                c=new Belico(vel, d, n, ataque, vidaExtra(v));
-            }else if (tipo.equals("Salto")){
-                c=new Salto(salto(), vel, d, n, ataque, v);
-            }else if (tipo.equals("Ataque")){
-                c=new Ataque(vel, d, n, ataque(ataque), v);
-            }else if (tipo.equals("Malvado")){
-                c=new Malvado(vel,d,n,ataque,v);
-            }else{
-                c=new Normal(vel,d,n,ataque,v);
+            if (tipo.equals("Belico")) {
+                c = new Belico(vel, d, n, ataque, vidaExtra(v));
+            } else if (tipo.equals("Salto")) {
+                c = new Salto(salto(), vel, d, n, ataque, v);
+            } else if (tipo.equals("Ataque")) {
+                c = new Ataque(vel, d, n, ataque(ataque), v);
+            } else if (tipo.equals("Malvado")) {
+                c = new Malvado(vel, d, n, ataque, v);
+            } else {
+                c = new Normal(vel, d, n, ataque, v);
             }
-           
+
             ac.getCarros().add(c);
             ac.escribirArchivo();
             actualizarCb();
-            
             JOptionPane.showMessageDialog(this, "Carro agregado exitosamente");
+            listar();
         }
     }//GEN-LAST:event_jButton3MouseClicked
 
     private void cb_tiposItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_tiposItemStateChanged
         // TODO add your handling code here:
-        if (cb_tipos.getSelectedIndex()==3){
+        if (cb_tipos.getSelectedIndex() == 3) {
             setearVida();
             tf_ataque.setEditable(false);
             tf_vida.setEditable(false);
-        }else{
-            tf_nombre.setEditable(true);
+        } else {
+            tf_vida.setEditable(true);
             tf_ataque.setEditable(true);
-            tf_ataque.setText("");
-            tf_vida.setText("");
+
         }
-        
-        
+
+
     }//GEN-LAST:event_cb_tiposItemStateChanged
-    
-    public void actualizarCb(){
-        adminCarro ac=new adminCarro("./Carros/Carros.emi");
+
+    public void actualizarCb() {
+        adminCarro ac = new adminCarro("./Carros/Carros.emi");
         ac.cargarArchivo();
-        DefaultComboBoxModel c=new DefaultComboBoxModel();
-        for (Carro temp: ac.getCarros()) {
+        DefaultComboBoxModel c = new DefaultComboBoxModel();
+        for (Carro temp : ac.getCarros()) {
             c.addElement(temp);
         }
         cb_carros.setModel(c);
     }
-    
-    public void actualizarArbol(){
+
+    public void listar() {
+        DefaultTreeModel m = (DefaultTreeModel) tree.getModel();
         
+        m.setRoot(new DefaultMutableTreeNode("Carros"));
+        //listar_no_orden(f,(DefaultMutableTreeNode)m.getRoot());
+        actualizarArbol((DefaultMutableTreeNode) m.getRoot());
+        tree.setRootVisible(true);
+        expandAllNodes(tree, 0, tree.getRowCount());
     }
     
-    public void setearVida(){
-        tf_vida.setText(String.valueOf(1000+r.nextInt(4000)));
-        tf_ataque.setText(String.valueOf(300+r.nextInt(400)));
+    public void actualizarArbol(DefaultMutableTreeNode nodo) {
+        adminCarro ac = new adminCarro("./Carros/Carros.emi");
+        ac.cargarArchivo();
+        
+        int cont=0;
+        for (Carro temp : ac.getCarros()) {
+            DefaultMutableTreeNode n1 = new DefaultMutableTreeNode(
+                    temp.getNombre());
+            System.out.println(n1);
+            nodo.add(n1);
+            System.out.println(cont);
+            cont++;
+        }
+        //expandAllNodes(tree, 0, tree.getRowCount());
     }
-    
-    public int vidaExtra(int vida){
-        int porcentaje=(50+r.nextInt(100))/100;
-        vida=vida+(vida*porcentaje);
+
+    private void expandAllNodes(JTree tree, int startingIndex, int rowCount) {
+        for (int i = startingIndex; i < rowCount; ++i) {
+            tree.expandRow(i);
+        }
+
+        if (tree.getRowCount() != rowCount) {
+            expandAllNodes(tree, rowCount, tree.getRowCount());
+        }
+    }
+
+    public void setearVida() {
+        tf_vida.setText(String.valueOf(1000 + r.nextInt(4000)));
+        tf_ataque.setText(String.valueOf(300 + r.nextInt(400)));
+    }
+
+    public int vidaExtra(int vida) {
+        int porcentaje = (50 + r.nextInt(100)) / 100;
+        vida = vida + (vida * porcentaje);
         return vida;
     }
-    
-    public int salto(){
-        int salto=1+r.nextInt(10);
+
+    public int salto() {
+        int salto = 1 + r.nextInt(10);
         return salto;
     }
-    
-    public int ataque(int ataque){
-        int porcentaje=(50+r.nextInt(50))/100;
-        ataque=ataque+(ataque*porcentaje);
+
+    public int ataque(int ataque) {
+        int porcentaje = (50 + r.nextInt(50)) / 100;
+        ataque = ataque + (ataque * porcentaje);
         return ataque;
     }
-    
+
     /**
      * @param args the command line arguments
      */
