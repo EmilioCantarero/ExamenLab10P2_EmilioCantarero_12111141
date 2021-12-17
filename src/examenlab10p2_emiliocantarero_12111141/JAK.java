@@ -5,12 +5,16 @@
  */
 package examenlab10p2_emiliocantarero_12111141;
 
+import java.util.Random;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Emilio Cantarero
  */
 public class JAK extends javax.swing.JFrame implements Runnable {
-
+    Random r=new Random();
     /**
      * Creates new form JAK
      */
@@ -52,6 +56,7 @@ public class JAK extends javax.swing.JFrame implements Runnable {
     public JAK() {
         initComponents();
         this.setLocationRelativeTo(null);
+        actualizarCb();
         barraJak.setMaximum(vidaJak);
         barraErrol.setMaximum(vidaErrol);
         barraErrol.setValue(vidaErrol);
@@ -89,21 +94,21 @@ public class JAK extends javax.swing.JFrame implements Runnable {
         jlvidaErrol = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tf_nombre = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cb_tipos = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cb_carros = new javax.swing.JComboBox<>();
         jButton4 = new javax.swing.JButton();
+        tf_ataque = new javax.swing.JFormattedTextField();
+        tf_derrape = new javax.swing.JFormattedTextField();
+        tf_vida = new javax.swing.JFormattedTextField();
+        tf_velocidad = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -228,19 +233,33 @@ public class JAK extends javax.swing.JFrame implements Runnable {
 
         jLabel11.setText("Tipo");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cb_tipos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Belico", "Salto", "Ataque", "Malvado", "Normal" }));
+        cb_tipos.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cb_tiposItemStateChanged(evt);
+            }
+        });
 
         jLabel12.setText("Ataque");
 
         jLabel13.setText("Derrape");
 
         jButton3.setText("Crear");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
 
         jLabel14.setText("Eliminar Carro");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jButton4.setText("Eliminar");
+
+        tf_ataque.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+
+        tf_derrape.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter()));
+
+        tf_velocidad.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -253,30 +272,30 @@ public class JAK extends javax.swing.JFrame implements Runnable {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                                                .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING))
-                                            .addComponent(jLabel10)))
-                                    .addComponent(jLabel12))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField2)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jLabel11)
-                                    .addComponent(jComboBox1, 0, 120, Short.MAX_VALUE)
-                                    .addComponent(jLabel13)
-                                    .addComponent(jTextField5))))
+                                    .addComponent(tf_nombre)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel10)
+                                    .addComponent(jLabel12)
+                                    .addComponent(tf_ataque)
+                                    .addComponent(tf_velocidad, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
+                                .addGap(84, 84, 84)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cb_tipos, 0, 120, Short.MAX_VALUE)
+                                    .addComponent(tf_derrape)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel9)
+                                            .addComponent(jLabel11)
+                                            .addComponent(jLabel13))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(tf_vida))))
                         .addGap(41, 41, 41))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
                             .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(cb_carros, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
@@ -288,30 +307,30 @@ public class JAK extends javax.swing.JFrame implements Runnable {
                     .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tf_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tf_vida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cb_tipos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tf_velocidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
                     .addComponent(jLabel13))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tf_ataque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tf_derrape, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
                 .addComponent(jButton3)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cb_carros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton4)
                 .addContainerGap(44, Short.MAX_VALUE))
@@ -366,6 +385,95 @@ public class JAK extends javax.swing.JFrame implements Runnable {
         hilo.start();
     }//GEN-LAST:event_jButton1MouseClicked
 
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        // TODO add your handling code here:
+        adminCarro ac=new adminCarro("./Carros/Carros.emi");
+        ac.cargarArchivo();
+        String n=tf_nombre.getText();
+        int v=Integer.parseInt(tf_vida.getText());
+        int vel=Integer.parseInt(tf_velocidad.getText());
+        String tipo=cb_tipos.getSelectedItem().toString();
+        int ataque=Integer.parseInt(tf_ataque.getText());
+        float d=Float.parseFloat(tf_derrape.getText());
+        
+        if (n.isEmpty() || String.valueOf(v).isEmpty() || String.valueOf(vel).isEmpty() ||
+                String.valueOf(ataque).isEmpty() || String.valueOf(d).isEmpty()){
+            JOptionPane.showMessageDialog(this,"Uno de los campos esta vacio");
+            
+        }else{
+            Carro c;
+           if (tipo.equals("Belico")){
+                c=new Belico(vel, d, n, ataque, vidaExtra(v));
+            }else if (tipo.equals("Salto")){
+                c=new Salto(salto(), vel, d, n, ataque, v);
+            }else if (tipo.equals("Ataque")){
+                c=new Ataque(vel, d, n, ataque(ataque), v);
+            }else if (tipo.equals("Malvado")){
+                c=new Malvado(vel,d,n,ataque,v);
+            }else{
+                c=new Normal(vel,d,n,ataque,v);
+            }
+           
+            ac.getCarros().add(c);
+            ac.escribirArchivo();
+            actualizarCb();
+            
+            JOptionPane.showMessageDialog(this, "Carro agregado exitosamente");
+        }
+    }//GEN-LAST:event_jButton3MouseClicked
+
+    private void cb_tiposItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_tiposItemStateChanged
+        // TODO add your handling code here:
+        if (cb_tipos.getSelectedIndex()==3){
+            setearVida();
+            tf_ataque.setEditable(false);
+            tf_vida.setEditable(false);
+        }else{
+            tf_nombre.setEditable(true);
+            tf_ataque.setEditable(true);
+            tf_ataque.setText("");
+            tf_vida.setText("");
+        }
+        
+        
+    }//GEN-LAST:event_cb_tiposItemStateChanged
+    
+    public void actualizarCb(){
+        adminCarro ac=new adminCarro("./Carros/Carros.emi");
+        ac.cargarArchivo();
+        DefaultComboBoxModel c=new DefaultComboBoxModel();
+        for (Carro temp: ac.getCarros()) {
+            c.addElement(temp);
+        }
+        cb_carros.setModel(c);
+    }
+    
+    public void actualizarArbol(){
+        
+    }
+    
+    public void setearVida(){
+        tf_vida.setText(String.valueOf(1000+r.nextInt(4000)));
+        tf_ataque.setText(String.valueOf(300+r.nextInt(400)));
+    }
+    
+    public int vidaExtra(int vida){
+        int porcentaje=(50+r.nextInt(100))/100;
+        vida=vida+(vida*porcentaje);
+        return vida;
+    }
+    
+    public int salto(){
+        int salto=1+r.nextInt(10);
+        return salto;
+    }
+    
+    public int ataque(int ataque){
+        int porcentaje=(50+r.nextInt(50))/100;
+        ataque=ataque+(ataque*porcentaje);
+        return ataque;
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -377,7 +485,7 @@ public class JAK extends javax.swing.JFrame implements Runnable {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -404,12 +512,12 @@ public class JAK extends javax.swing.JFrame implements Runnable {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar barraErrol;
     private javax.swing.JProgressBar barraJak;
+    private javax.swing.JComboBox<String> cb_carros;
+    private javax.swing.JComboBox<String> cb_tipos;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -429,15 +537,15 @@ public class JAK extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JLabel jl_ataqueJak;
     private javax.swing.JLabel jlataqueErrol;
     private javax.swing.JLabel jlvidaErrol;
     private javax.swing.JLabel jlvidaJak;
+    private javax.swing.JFormattedTextField tf_ataque;
+    private javax.swing.JFormattedTextField tf_derrape;
+    private javax.swing.JTextField tf_nombre;
+    private javax.swing.JFormattedTextField tf_velocidad;
+    private javax.swing.JFormattedTextField tf_vida;
     private javax.swing.JTree tree;
     // End of variables declaration//GEN-END:variables
 
