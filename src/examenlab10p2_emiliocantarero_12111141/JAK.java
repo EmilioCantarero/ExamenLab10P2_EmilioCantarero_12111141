@@ -33,22 +33,60 @@ public class JAK extends javax.swing.JFrame implements Runnable {
     private int ataqueJak = 5000;
     private int vidaErrol = 30000;
     private int ataqueErrol = 500;
+    Carro seleccion = new Carro();
+    Carro malvado = new Carro();
+    int seguro = 1;
 
     @Override
     public void run() {
+
         while (vivo) {
+            jlBatalla.setText("Carro de Jak Vs. Carro Malvado de Ciber Errol");
+            jlataqueErrol.setText(String.valueOf(malvado.getAtaque()));
+            jl_ataqueJak.setText(String.valueOf(seleccion.getAtaque()));
+            jlbla.setText("Batalla Inicial");
             System.out.println("");
             while (!pausa) {
                 try {
-                    barraErrol.setValue(barraErrol.getValue() - ataqueJak);
+                    barraErrol.setValue(barraErrol.getValue() - seleccion.getAtaque());
+                    jlvidaErrol.setText(String.valueOf(barraErrol.getValue()));
                     if (barraErrol.getValue() <= 0) {
-                        vivo = false;
-                        break;
+
+                        if (seguro == 1) {
+                            jlBatalla.setText("Jak Vs. Ciber Errol");
+                            barraJak.setMaximum(5000);
+                            barraErrol.setMaximum(30000);
+                            barraErrol.setValue(30000);
+                            barraJak.setValue(5000);
+                            jlbla.setText("Batalla Final");
+                            seleccion.setAtaque(5000);
+                            malvado.setAtaque(500);
+                            jlataqueErrol.setText(String.valueOf(malvado.getAtaque()));
+                            jl_ataqueJak.setText(String.valueOf(seleccion.getAtaque()));
+                        }
+                        if (barraJak.getValue() <= 0) {
+                            JOptionPane.showMessageDialog(this, "Has perdido");
+                            vivo = false;
+                            break;
+                        }
+                        if (barraErrol.getValue() <= 0) {
+                            JOptionPane.showMessageDialog(this, "Has ganado");
+                            vivo = false;
+                            break;
+                        }
+                        seguro++;
                     }
                     if (cont == 2) {
-                        barraJak.setValue(barraJak.getValue() - ataqueErrol);
+                        barraJak.setValue(barraJak.getValue() - malvado.getAtaque());
+                        jlvidaJak.setText(String.valueOf(barraJak.getValue()));
+                        if (barraJak.getValue() <= 0) {
+                            vivo = false;
+                            JOptionPane.showMessageDialog(this, "Has perdido");
+                            break;
+                        }
                         cont = 0;
                     }
+
                     Thread.sleep(500);
                     cont++;
                 } catch (Exception e) {
@@ -63,10 +101,10 @@ public class JAK extends javax.swing.JFrame implements Runnable {
         initComponents();
         this.setLocationRelativeTo(null);
         actualizarCb();
-        barraJak.setMaximum(vidaJak);
-        barraErrol.setMaximum(vidaErrol);
-        barraErrol.setValue(vidaErrol);
-        barraJak.setValue(vidaJak);
+
+        adminCarro ac = new adminCarro("./Carros/Carros.emi");
+        ac.cargarArchivo();
+        malvado = ac.getCarros().get(1);
         listar();
     }
 
@@ -99,6 +137,8 @@ public class JAK extends javax.swing.JFrame implements Runnable {
         jlvidaJak = new javax.swing.JLabel();
         jlataqueErrol = new javax.swing.JLabel();
         jlvidaErrol = new javax.swing.JLabel();
+        jlBatalla = new javax.swing.JLabel();
+        jlbla = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         tf_nombre = new javax.swing.JTextField();
@@ -152,13 +192,9 @@ public class JAK extends javax.swing.JFrame implements Runnable {
 
         jLabel7.setText("Vida Ciber Errol:");
 
-        jl_ataqueJak.setText("LabelAtaque");
+        jlBatalla.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        jlvidaJak.setText("LabelVida");
-
-        jlataqueErrol.setText("Label");
-
-        jlvidaErrol.setText("Label");
+        jlbla.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -167,33 +203,40 @@ public class JAK extends javax.swing.JFrame implements Runnable {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(1, 1, 1)
-                        .addComponent(jl_ataqueJak))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(18, 18, 18)
-                        .addComponent(jlvidaJak)))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(barraJak, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-                    .addComponent(barraErrol, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jlataqueErrol))
+                                .addComponent(jLabel4)
+                                .addGap(1, 1, 1)
+                                .addComponent(jl_ataqueJak))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
+                                .addComponent(jLabel5)
                                 .addGap(18, 18, 18)
-                                .addComponent(jlvidaErrol)))
+                                .addComponent(jlvidaJak)))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(barraJak, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                            .addComponent(barraErrol, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel6)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jlataqueErrol))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel7)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jlvidaErrol)))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jlBatalla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jlbla, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -227,7 +270,10 @@ public class JAK extends javax.swing.JFrame implements Runnable {
                     .addComponent(jLabel7)
                     .addComponent(jlvidaJak)
                     .addComponent(jlvidaErrol))
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jlBatalla, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlbla, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Juego", jPanel2);
@@ -393,9 +439,33 @@ public class JAK extends javax.swing.JFrame implements Runnable {
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
-        hilo = new Thread(this);
-        hilo.start();
+        DefaultTreeModel m = (DefaultTreeModel) tree.getModel();
+        Object v1
+                = tree.getLastSelectedPathComponent();
+        nodo_seleccionado = (DefaultMutableTreeNode) v1;
+        //System.out.println(nodo_seleccionado.toString());
+        if (v1 == null) {
+            JOptionPane.showMessageDialog(this, "Por favor seleccione un nodo");
+        } else if (nodo_seleccionado.isRoot()) {
+            JOptionPane.showMessageDialog(this, "No puede seleccionar la raiz");
+
+        } else {
+            adminCarro ac = new adminCarro("./Carros/Carros.emi");
+            ac.cargarArchivo();
+            DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) m.getRoot();
+            int pos = raiz.getIndex(nodo_seleccionado);
+            Carro c = ac.getCarros().get(pos);
+            seleccion = c;
+            barraJak.setMaximum(seleccion.getVida());
+            barraErrol.setMaximum(malvado.getVida());
+            barraErrol.setValue(malvado.getVida());
+            barraJak.setValue(seleccion.getVida());
+            hilo = new Thread(this);
+            hilo.start();
+        }
     }//GEN-LAST:event_jButton1MouseClicked
+
+    DefaultMutableTreeNode nodo_seleccionado;
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         // TODO add your handling code here:
@@ -451,7 +521,7 @@ public class JAK extends javax.swing.JFrame implements Runnable {
 
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
         // TODO add your handling code here:
-        int indice=cb_carros.getSelectedIndex();
+        int indice = cb_carros.getSelectedIndex();
         adminCarro ac = new adminCarro("./Carros/Carros.emi");
         ac.cargarArchivo();
         ac.getCarros().remove(indice);
@@ -473,19 +543,19 @@ public class JAK extends javax.swing.JFrame implements Runnable {
 
     public void listar() {
         DefaultTreeModel m = (DefaultTreeModel) tree.getModel();
-        
+
         m.setRoot(new DefaultMutableTreeNode("Carros"));
         //listar_no_orden(f,(DefaultMutableTreeNode)m.getRoot());
         actualizarArbol((DefaultMutableTreeNode) m.getRoot());
         tree.setRootVisible(true);
         expandAllNodes(tree, 0, tree.getRowCount());
     }
-    
+
     public void actualizarArbol(DefaultMutableTreeNode nodo) {
         adminCarro ac = new adminCarro("./Carros/Carros.emi");
         ac.cargarArchivo();
-        
-        int cont=0;
+
+        int cont = 0;
         for (Carro temp : ac.getCarros()) {
             DefaultMutableTreeNode n1 = new DefaultMutableTreeNode(
                     temp.getNombre());
@@ -592,8 +662,10 @@ public class JAK extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel jlBatalla;
     private javax.swing.JLabel jl_ataqueJak;
     private javax.swing.JLabel jlataqueErrol;
+    private javax.swing.JLabel jlbla;
     private javax.swing.JLabel jlvidaErrol;
     private javax.swing.JLabel jlvidaJak;
     private javax.swing.JFormattedTextField tf_ataque;
